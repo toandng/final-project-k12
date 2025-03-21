@@ -52,7 +52,7 @@ export default function RegisterForm() {
 
   return (
     <form onSubmit={handleSubmit} className={`${styles.container}`}>
-      <h2>Đăng Ký</h2>
+      <h2>Register</h2>
         <p>Họ Và Tên</p> <input className={`${styles.name}`}
         type="text"
         name="name"

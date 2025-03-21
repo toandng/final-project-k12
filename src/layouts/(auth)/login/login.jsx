@@ -4,7 +4,6 @@ function Login() {
 
     return(
        <div  className={`${styles.container}`}> 
-            <h1>Đăng nhập</h1>
             <FormLogin/>
        </div>
     )
