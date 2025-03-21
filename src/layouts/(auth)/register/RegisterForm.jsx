@@ -90,7 +90,7 @@ export default function RegisterForm() {
       />
      {error && <p className={styles.error}>{error}</p>}
       <button type="submit" >Đăng kí</button>
-      {data && <p>Đăng ký thành công:</p>}
+      {data && <p>Đăng ký thành công</p>}
       
     </form>
   );
