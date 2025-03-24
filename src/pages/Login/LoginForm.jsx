@@ -1,14 +1,11 @@
 import { useState } from "react";
-import styles from '../../(auth)/login/LoginForm.module.scss'
-import {NavLink} from "react-router-dom"
-import config from "../../../config";
+import styles from './LoginForm.module.scss'
+import {NavLink, useNavigate} from "react-router-dom"
+import config from "../../config";
 export default function LoginForm() {
-  const [formData, setFormData] = useState({
-    phone: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ phone: "", password: "" });
   const [error, setError] = useState("");
-  const [data, setData] = useState(null);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,28 +13,29 @@ export default function LoginForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    
     try {
-      const response = await fetch("https://rtk9rj-8080.csb.app/users");
+      const response = await fetch("https://rtk9rj-8080.csb.app/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
       if (!response.ok) {
-        throw new Error("Lỗi khi lấy dữ liệu người dùng");
+        throw new Error("Đăng nhập thất bại");
       }
-      
-      const users = await response.json();
-      const user = users.find(u => u.phone === formData.phone && u.password === formData.password);
-      
-      if (!user) {
-        setError("Số điện thoại hoặc mật khẩu không đúng");
-        return;
+
+      const result = await response.json();
+      if (result && result.accessToken) {
+        localStorage.setItem("token", result.accessToken);
+        navigate(config.routes.home); // 👈 Chuyển hướng đến Home
+      } else {
+        throw new Error("Không nhận được access token");
       }
-      
-      setData(user);
-      console.log("Đăng nhập thành công", user);
     } catch (error) {
-      setError("Lỗi khi đăng nhập");
+      setError(error.message);
     }
   };
+
 
   return (
     <form onSubmit={handleSubmit}  className={`${styles.container}`}>
@@ -69,9 +67,8 @@ export default function LoginForm() {
       </div>
       {error && <p className="text-red-500">{error}</p>}
       <button type="submit">Đăng Nhập</button>
-      {data && <p>Đăng nhập thành công:</p>}
 
-      <NavLink to={config.routes.register}>Don't have account? Register here!</NavLink>
+      <NavLink to={config.routes.register}>Don&apos;t have account? Register here!</NavLink>
     </form>
     
   );

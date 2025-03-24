@@ -6,7 +6,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
-import styles from '../../(verify)/phone/VerifyPhoneForm.module.scss'
+import styles from './VerifyPhoneForm.module.scss'
 import {NavLink} from "react-router-dom"
 import config from "../../../config";
 const steps = [' ', ' ', ' '];
