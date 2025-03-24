@@ -1,7 +1,13 @@
 import { Navigate } from "react-router-dom";
+import config from "../../config";
+import PropTypes from "prop-types"
 
-function PrivateRoute({ component: Component }) {
-  const token = localStorage.getItem("token");
-  return token ? <Component /> : <Navigate to="/login" replace />;
+function PrivateRoute({ component: Component}) {
+  const token = localStorage.getItem("accessToken" )
+
+  return token ? <Component/> : <Navigate to={config.routes.login} />
 }
-export default PrivateRoute
+PrivateRoute.propTypes = {
+  component: PropTypes.any
+}
+export default PrivateRoute;

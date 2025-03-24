@@ -3,7 +3,7 @@ import styles from './LoginForm.module.scss'
 import {NavLink, useNavigate} from "react-router-dom"
 import config from "../../config";
 export default function LoginForm() {
-  const [formData, setFormData] = useState({ phone: "", password: "" });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ export default function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://rtk9rj-8080.csb.app/users", {
+      const response = await fetch("https://api01.f8team.dev/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -25,11 +25,17 @@ export default function LoginForm() {
       }
 
       const result = await response.json();
-      if (result && result.accessToken) {
-        localStorage.setItem("token", result.accessToken);
-        navigate(config.routes.home); // 👈 Chuyển hướng đến Home
+
+      
+      const token = result.access_token || result.accessToken || result.token || result.jwtToken;
+      console.log("Token nhận được:", token);
+
+      if (token) {
+        localStorage.getItem("accessToken", token);
+        console.log("Đăng nhập thành công:", result);
+        navigate(config.routes.home);
       } else {
-        throw new Error("Không nhận được access token");
+        throw new Error("Không nhận được token từ server");
       }
     } catch (error) {
       setError(error.message);
@@ -44,13 +50,13 @@ export default function LoginForm() {
             <p>Create an account or login to join your orders</p>
         </div>
       <div>
-        <p  className={`${styles.login}`}>Số điện thoại</p>
+        <p  className={`${styles.login}`}>Email</p>
         <input
-          className={`${styles.phone}`}
-          type="tel"
-          name="phone"
-          placeholder="Số điện thoại"
-          value={formData.phone}
+          className={`${styles.email}`}
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
           onChange={handleChange}
           required
         />

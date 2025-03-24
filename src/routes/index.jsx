@@ -1,10 +1,11 @@
 import { Navigate } from "react-router-dom";
 import config from "../config";
-import Login from "../pages/Login/LoginForm"
-import Register from "../pages/Register/RegisterForm"
+import Login from "../pages/Login/LoginForm";
+import Register from "../pages/Register/RegisterForm";
 import VerifyPhone from "../pages/VerifyPhone/phone/VerifyPhoneForm";
 import HomePage from "../pages/HomePage";
 import PrivateRoute from "../components/PrivateRoute";
+
 const routes = [
   {
     path: "/",
@@ -13,8 +14,8 @@ const routes = [
   },
   {
     path: config.routes.home,
-    component: () => <PrivateRoute component={HomePage}/>,
-    protected: true,
+    component: () => <PrivateRoute component={HomePage} />,
+    private: true,
   },
   {
     path: config.routes.login,

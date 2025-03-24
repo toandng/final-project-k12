@@ -5,8 +5,9 @@ import config from "../../config";
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
+    firstName: "",
+    lastName: "",
+    email: "",
     password: "",
     confirmPassword: "",
   });
@@ -21,8 +22,20 @@ export default function RegisterForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.password.length < 6) {
-      setError("Mật khẩu phải từ 6 kí tự trở lên");
+    if (formData.firstName.trim() === "") {
+      setError("Trường họ không được để trống");
+      return;
+    }
+    if (formData.lastName.trim() === "") {
+      setError("Trường tên không được để trống");
+      return;
+    }
+    if (formData.email.trim() === "") {
+      setError("Email không được để trống");
+      return;
+    }
+    if (formData.password.length < 8) {
+      setError("Mật khẩu phải từ 8 kí tự trở lên");
       return;
     }
     if (formData.password !== formData.confirmPassword) {
@@ -33,35 +46,46 @@ export default function RegisterForm() {
 
     try {
       console.log("Dữ liệu gửi đi:", formData);
+      const payload = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+        password_confirmation: formData.confirmPassword,
+      };
 
-      const response = await fetch("https://rtk9rj-8080.csb.app/users", {
+      const response = await fetch("https://api01.f8team.dev/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
-
-      if (!response.ok) {
-        const errorDetail = await response.json();
-        console.error("Chi tiết lỗi:", errorDetail);
-        throw new Error(errorDetail.message || "Đăng ký thất bại");
-      }
 
       const result = await response.json();
       console.log("Kết quả đăng ký:", result);
 
-      if (result && result.accessToken) {
-        localStorage.setItem("token", result.accessToken);
+      if (!response.ok) {
+        console.error("Chi tiết lỗi:", result);
+        throw new Error(result.message || "Đăng ký thất bại");
+      }
+
+      // Kiểm tra token rõ ràng
+      const token = result.access_token || result.accessToken || result.token || result.jwtToken;
+      console.log("Token nhận được:", token);
+
+      if (token) {
+        localStorage.setItem("accessToken", token);
         setData(result);
         console.log("Đăng ký thành công:", result);
         navigate(config.routes.verifyPhone);
       } else {
-        throw new Error("Không nhận được access token");
+        throw new Error("Không nhận được token từ server");
       }
+
     } catch (error) {
       setError(error.message || "Lỗi khi đăng ký");
-      console.error(error);
+      console.error("Lỗi từ catch:", error);
     }
   };
 
@@ -69,31 +93,42 @@ export default function RegisterForm() {
     <form onSubmit={handleSubmit} className={`${styles.container}`}>
       <h2>Register</h2>
 
-      <p>Họ Và Tên</p>
+      <p>First Name</p>
       <input
-        className={`${styles.name}`}
+        className={`${styles.firstName}`}
         type="text"
-        name="name"
-        placeholder="Họ và Tên"
-        value={formData.name}
+        name="firstName"
+        placeholder="First Name"
+        value={formData.firstName}
         onChange={handleChange}
         required
       />
 
-      <p>Số điện thoại</p>
+      <p>Last Name</p>
       <input
-        className={`${styles.phone}`}
-        type="tel"
-        name="phone"
-        placeholder="Số điện thoại"
-        value={formData.phone}
+        className={`${styles.lastName}`}
+        type="text"
+        name="lastName"
+        placeholder="Last Name"
+        value={formData.lastName}
+        onChange={handleChange}
+        required
+      />
+
+      <p>Email</p>
+      <input
+        className={`${styles.email}`}
+        type="email"
+        name="email"
+        placeholder="Email"
+        value={formData.email}
         onChange={handleChange}
         required
       />
 
       <p>Password</p>
       <input
-        className={`${styles.passwords}`}
+        className={`${styles.password}`}
         type="password"
         name="password"
         placeholder="Mật khẩu"

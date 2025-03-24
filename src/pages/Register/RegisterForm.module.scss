@@ -34,12 +34,12 @@ $background-color: #f8f9fa;
       border-radius: 5px;
       transition: 0.3s ease;
       position: absolute ;
-      bottom: 20%;
+      bottom: 0;
       width: 100%;
       right: 0;
       border: none;
     } 
-  .name{
+  .firstName{
     width: 90%;
     height: 40px;
     padding: 0px 8px;
@@ -48,7 +48,7 @@ $background-color: #f8f9fa;
     background-color: #f8f9fa;
     border-radius: 5px;
   }
-  .phone{
+  .lastName{
     width: 90%;
     height: 40px;
     padding: 0px 8px;
@@ -58,7 +58,17 @@ $background-color: #f8f9fa;
     border-radius: 5px;
 
   }
-  .passwords{
+  .email{
+    width: 90%;
+    height: 40px;
+    padding: 0px 8px;
+    margin: 10px auto;
+    border: 1px solid #000;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+
+  }
+  .password{
     width: 90%;
     height: 40px;
     padding: 0px 8px;
