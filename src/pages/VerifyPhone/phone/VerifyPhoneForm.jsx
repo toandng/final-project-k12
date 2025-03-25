@@ -1,6 +1,6 @@
 
 
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -12,7 +12,7 @@ import config from "../../../config";
 const steps = [' ', ' ', ' '];
 
 const VerifyPhoneForm = () => {
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep] = useState(0);
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [resendTimer, setResendTimer] = useState(30);
 
@@ -71,9 +71,9 @@ const VerifyPhoneForm = () => {
       </Box>
 
       <div >
-        <h2>Verify phone number</h2>
+        <h2>Verify email number</h2>
         <p>
-          Enter the 6-digit code sent to <span>+84*******</span>
+          Enter the 6-digit code sent to <span>email</span>
         </p>
 
         <div className={`${styles.input}`}>
