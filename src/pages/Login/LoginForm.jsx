@@ -1,11 +1,16 @@
 import { useState } from "react";
 import styles from './LoginForm.module.scss'
-import {NavLink, useNavigate} from "react-router-dom"
+import { useNavigate} from "react-router-dom";
+import Button from "../../components/Button";
 import config from "../../config";
+import httpRequest from "../../utils/httpRequest";
+import authServices from "../../services/authServices";
+
 export default function LoginForm() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -13,44 +18,30 @@ export default function LoginForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch("https://api01.f8team.dev/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Đăng nhập thất bại");
-      }
-
-      const result = await response.json();
-
-      
-      const token = result.access_token || result.accessToken || result.token || result.jwtToken;
-      console.log("Token nhận được:", token);
-
-      if (token) {
-        localStorage.getItem("accessToken", token);
-        console.log("Đăng nhập thành công:", result);
-        navigate(config.routes.home);
-      } else {
-        throw new Error("Không nhận được token từ server");
-      }
-    } catch (error) {
-      setError(error.message);
+    setIsLoading(true);
+    
+    const data = await authServices.login(formData)
+    if(data.status === "success") {
+      httpRequest.setToken(data.access_token)
+      navigate(config.routes.home)
     }
+    else{
+      setError(true)
+    }
+    setIsLoading(false)
   };
 
 
   return (
-    <form onSubmit={handleSubmit}  className={`${styles.container}`}>
-       <div>
-            <h2>Welcome to Scrap Plan</h2>
-            <p>Create an account or login to join your orders</p>
-        </div>
+    <><div className={`${styles.img}`}> <img src="/img/7.jpg" alt="" /></div>
+    <form onSubmit={handleSubmit} className={`${styles.container}`}>
+
       <div>
-        <p  className={`${styles.login}`}>Email</p>
+        <h2>Welcome to Scrap Plan</h2>
+        <p>Create an account or login to join your orders</p>
+      </div>
+      <div>
+        <p className={`${styles.login}`}>Email</p>
         <input
           className={`${styles.email}`}
           type="email"
@@ -58,9 +49,8 @@ export default function LoginForm() {
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
-          required
-        />
-        <p  className={`${styles.login}`}>Password</p>
+          required />
+        <p className={`${styles.login}`}>Password</p>
         <input
           className={`${styles.password}`}
           type="password"
@@ -68,14 +58,18 @@ export default function LoginForm() {
           placeholder="Mật khẩu"
           value={formData.password}
           onChange={handleChange}
-          required
-        />
+          required />
       </div>
       {error && <p className="text-red-500">{error}</p>}
-      <button type="submit">Đăng Nhập</button>
-
-      <NavLink to={config.routes.register}>Don&apos;t have account? Register here!</NavLink>
-    </form>
+      <Button size="lg" type="submit" isLoading={isLoading}>
+        LOGIN
+      </Button>
+      <div className={styles.needAccount}>
+        <span className={styles.span}>Don&apos;t have account?</span>
+        <Button type="Link" to={config.routes.register}> Register here!</Button>
+      </div>
+     
+    </form></>
     
   );
 }

@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import config from "../config";
-import Login from "../pages/Login/LoginForm";
+import LoginForm from "../pages/Login/LoginForm";
 import Register from "../pages/Register/RegisterForm";
 import VerifyPhone from "../pages/VerifyPhone/phone/VerifyPhoneForm";
 import HomePage from "../pages/HomePage";
@@ -19,7 +19,7 @@ const routes = [
   },
   {
     path: config.routes.login,
-    component: Login,
+    component: LoginForm,
     protected: false,
   },
   {

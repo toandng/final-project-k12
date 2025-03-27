@@ -6,11 +6,10 @@ function ProtectedRoute({ children }) {
   const location = useLocation();
 
   if (!token) {
-    // Chưa đăng nhập, chuyển về /login
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Đã đăng nhập, render children
+  
   return children;
 }
 

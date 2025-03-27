@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import styles from './RegisterForm.module.scss';
 import config from "../../config";
+import authServices from "../../services/authServices"
+import httpRequest from "../../utils/httpRequest";
+import Button from "../../components/Button";
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -12,16 +15,20 @@ export default function RegisterForm() {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
-  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+  
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
+    setError("");
     if (formData.firstName.trim() === "") {
       setError("Trường họ không được để trống");
       return;
@@ -42,50 +49,26 @@ export default function RegisterForm() {
       setError("Mật khẩu không khớp");
       return;
     }
-    setError("");
-
+    const requestData = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      password: formData.password,
+      password_confirmation: formData.confirmPassword, 
+    };
+   
     try {
-      console.log("Dữ liệu gửi đi:", formData);
-      const payload = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        password: formData.password,
-        password_confirmation: formData.confirmPassword,
-      };
-
-      const response = await fetch("https://api01.f8team.dev/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const result = await response.json();
-      console.log("Kết quả đăng ký:", result);
-
-      if (!response.ok) {
-        console.error("Chi tiết lỗi:", result);
-        throw new Error(result.message || "Đăng ký thất bại");
-      }
-
-      // Kiểm tra token rõ ràng
-      const token = result.access_token || result.accessToken || result.token || result.jwtToken;
-      console.log("Token nhận được:", token);
-
-      if (token) {
-        localStorage.setItem("accessToken", token);
-        setData(result);
-        console.log("Đăng ký thành công:", result);
+      const data = await authServices.register(requestData);
+      if (data.status === "success") {
+        httpRequest.setToken(data.access_token);
         navigate(config.routes.verifyPhone);
       } else {
-        throw new Error("Không nhận được token từ server");
+        setError(data.message || "Đăng ký thất bại");
       }
-
     } catch (error) {
-      setError(error.message || "Lỗi khi đăng ký");
-      console.error("Lỗi từ catch:", error);
+      setError(error.response?.data?.message || "Đăng ký thất bại");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -131,7 +114,7 @@ export default function RegisterForm() {
         className={`${styles.password}`}
         type="password"
         name="password"
-        placeholder="Mật khẩu"
+        placeholder="password"
         value={formData.password}
         onChange={handleChange}
         required
@@ -142,15 +125,16 @@ export default function RegisterForm() {
         className={`${styles.confirmPassword}`}
         type="password"
         name="confirmPassword"
-        placeholder="Xác nhận mật khẩu"
+        placeholder="confirmPassword"
         value={formData.confirmPassword}
         onChange={handleChange}
         required
       />
 
       {error && <p className={styles.error}>{error}</p>}
-      <button type="submit">Đăng ký</button>
-      {data && <p>Đăng ký thành công</p>}
+      <Button size="lg" type="submit" isLoading={isLoading}>
+            REGISTER
+      </Button>
     </form>
   );
 }
