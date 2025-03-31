@@ -22,6 +22,7 @@ return(
             <li>Bảng xếp hạng</li>
             <li>Tài khoản thanh toán</li>
         </ul>
+        <Button component={Link} to={config.routes.login}>Logout</Button>
     </div>
 )
 }
