@@ -1,75 +1,74 @@
 import { useState } from "react";
-import styles from './LoginForm.module.scss'
-import { useNavigate} from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "react-router-dom";
+import styles from "./LoginForm.module.scss";
 import Button from "../../components/Button";
 import config from "../../config";
-import httpRequest from "../../utils/httpRequest";
 import authServices from "../../services/authServices";
+import loginSchema from "../../schema/loginSchema";
+import httpRequest from "../../utils/httpRequest";
 
 export default function LoginForm() {
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(loginSchema),
+  });
+
   const navigate = useNavigate();
+  const [error, setGeneralError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     setIsLoading(true);
-    
-    const data = await authServices.login(formData)
-    if(data.status === "success") {
-      httpRequest.setToken(data.access_token)
-      navigate(config.routes.home)
-    }
-    else{
-      setError(true)
-    }
-    setIsLoading(false)
-  };
+    setGeneralError(""); // Reset lỗi trước khi gửi request
 
+    try {
+      const response = await authServices.login(data);
+      if (response?.access_token) {
+        httpRequest.setToken(response.access_token);
+        navigate(config.routes.home);
+      } else {
+        setGeneralError("Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.");
+      }
+    } catch (err) {
+      setGeneralError(err.response?.data?.message || "Đã xảy ra lỗi. Vui lòng thử lại!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <><div className={`${styles.img}`}> <img src="/img/7.jpg" alt="" /></div>
-    <form onSubmit={handleSubmit} className={`${styles.container}`}>
+    <>
+      <div className={styles.img}>
+        <img src="/img/7.jpg" alt="Background" />
+      </div>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.container}>
+        <div>
+          <h2>Welcome to Scrap Plan</h2>
+          <p>Create an account or login to join your orders</p>
+        </div>
+        <div>
+          <label className={styles.login}>Email</label>
+          <input className={styles.email} type="email" {...register("email")} />
+          {errors.email && <p className={styles.error}>{errors.email.message}</p>}
 
-      <div>
-        <h2>Welcome to Scrap Plan</h2>
-        <p>Create an account or login to join your orders</p>
-      </div>
-      <div>
-        <p className={`${styles.login}`}>Email</p>
-        <input
-          className={`${styles.email}`}
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required />
-        <p className={`${styles.login}`}>Password</p>
-        <input
-          className={`${styles.password}`}
-          type="password"
-          name="password"
-          placeholder="Mật khẩu"
-          value={formData.password}
-          onChange={handleChange}
-          required />
-      </div>
-      {error && <p className="text-red-500">{error}</p>}
-      <Button size="lg" type="submit" isLoading={isLoading}>
-        LOGIN
-      </Button>
-      <div className={styles.needAccount}>
-        <span className={styles.span}>Don&apos;t have account?</span>
-        <Button type="Link" to={config.routes.register}> Register here!</Button>
-      </div>
-     
-    </form></>
-    
+          <label className={styles.login}>Password</label>
+          <input className={styles.password} type="password" {...register("password")} />
+          {errors.password && <p className={styles.error}>{errors.password.message}</p>}
+        </div>
+        {error && <p className={styles.error}>{error}</p>}
+        <Button size="lg" type="submit" isLoading={isLoading}>
+          LOGIN
+        </Button>
+        <div className={styles.needAccount}>
+          <span className={styles.span}>Don&apos;t have an account?</span>
+          <Button type="Link" to={config.routes.register}> Register here!</Button>
+        </div>
+      </form>
+    </>
   );
 }

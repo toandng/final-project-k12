@@ -12,7 +12,7 @@ function ProtectedRoute({ children }) {
   
   return children;
 }
-
+  
 ProtectedRoute.propTypes = {
   children: PropTypes.element.isRequired,
 };

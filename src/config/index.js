@@ -1,9 +1,13 @@
+
 const config ={
     routes: {
         home: "/home",
         login: "/login",
         register: "/register",
-        verifyPhone: "/verify-phone"
+        verifyPhone: "/verify-phone",
+        profile: "/profile",
+        features: "/features",
+        edit: "/edit"
     }
 }
 export default config;

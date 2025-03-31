@@ -33,7 +33,7 @@ function Button ({
    const hanldeClick = () => {
     if(disable || isLoading) return;
 
-        onClick()
+        onClick && onClick()
    };
    
    return(

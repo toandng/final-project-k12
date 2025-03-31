@@ -8,16 +8,14 @@ const httpRequest = axios.create({
     },
 }) 
 
-const send = async (method, url, data, config) => {
-    const response = await httpRequest.request({
-        method,
-        url,
-        data,
-        config,
-    });
-    if(response.status >= 200 && response.status < 400) {
-        return response.data
-    }
+const send = async (method, url, data,config) => {
+   try {
+        const res = await httpRequest({method, url, data, ...config});
+        return res.data
+   } catch (error) {
+        console.log(error);
+        return error.response?.data
+   }
 }
 
 export const get = (url, config) =>{
