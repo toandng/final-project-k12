@@ -10,6 +10,7 @@ function Button ({
     icon,
     primary = false,
     secondary = false,
+    normal = false,
     rounded = false,
     to = "",
     className = "",
@@ -37,9 +38,11 @@ function Button ({
    };
    
    return(
+   
     <Component
         {...passProps}
         className={clsx(styles.wrapper, className, {
+            [styles.normal]: normal,
             [styles.primary]: primary,
             [styles.secondary]: secondary,
             [styles.rounded]: rounded,
@@ -56,6 +59,7 @@ function Button ({
             </div>
         )}
     </Component>
+    
    )
 }
 
@@ -67,9 +71,11 @@ Button.propTypes = {
     href: PropTypes.string,
     primary: PropTypes.bool,
     secondary: PropTypes.bool,
+    normal: PropTypes.bool,
     rounded: PropTypes.bool,
     disable: PropTypes.bool,
     isLoading: PropTypes.bool,
+
     onClick: PropTypes.func,
 
 }

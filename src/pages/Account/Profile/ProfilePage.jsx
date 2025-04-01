@@ -48,12 +48,16 @@ function ProfilePage () {
         <p><strong>Ngày tạo:</strong> {new Date(user?.createdAt).toLocaleDateString()}</p>
     </div>
     <div>
-        <Button component={Link}    
+        <Button component={Link} secondary  
         to={config.routes.edit}  > Cập nhật thông tin</Button>
     </div>
     <div>
-        <Button component={Link}    
+        <Button component={Link} secondary
         to={config.routes.home}  > Quay lại</Button>
+    </div>
+    <div>
+        <Button component={Link} secondary
+        to={config.routes.login}  > Logout</Button>
     </div>
 </section>
   )

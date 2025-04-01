@@ -9,6 +9,7 @@ import config from "../../../../../config";
 import Button from "../../../../../components/Button";
 import { toast } from "react-toastify";
 
+// eslint-disable-next-line react/prop-types
 function EditProfile({ user: initialUser }) {
   const [user, setUser] = useState(initialUser);
   const navigate = useNavigate();
@@ -135,10 +136,10 @@ function EditProfile({ user: initialUser }) {
       {errors.birthDate && <p className={styles.error}>{errors.birthDate.message}</p>}
 
       <div className={styles.buttons}>
-        <Button size="lg" type="button" onClick={() => navigate(-1)}>
+        <Button size="lg" type="button" onClick={() => navigate(-1)} primary> 
           Hủy
         </Button>
-        <Button size="lg" type="submit" isLoading={isLoading}>
+        <Button size="lg" type="submit" isLoading={isLoading} secondary>
           Cập nhật
         </Button>
       </div> 

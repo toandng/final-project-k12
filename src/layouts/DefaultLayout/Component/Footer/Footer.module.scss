@@ -1,0 +1,38 @@
+.foter {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  
+    a {
+      text-decoration: none !important;
+      color: inherit;
+    }
+  
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 10px 15px;
+      color: white;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+  
+      &:hover {
+        color: #ffcc00;
+        transform: scale(1.1);
+      }
+  
+      svg {
+        font-size: 22px;
+  
+      
+        
+      }
+    }
+  }
+  
