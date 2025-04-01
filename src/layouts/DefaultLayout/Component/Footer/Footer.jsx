@@ -25,7 +25,7 @@ function Footer() {
                 <Button icon={faFacebook} normal to={config.routes.home}>Thu nhập</Button>
               </div>  
               <div>
-                <Button icon={faUser} normal to={config.routes.profile}>Tài khoản</Button>
+                <Button icon={faUser} normal to={config.routes.features}>Tài khoản</Button>
               </div>  
             </div>
         </div>

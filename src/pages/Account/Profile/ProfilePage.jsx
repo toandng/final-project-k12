@@ -55,10 +55,7 @@ function ProfilePage () {
         <Button component={Link} secondary
         to={config.routes.home}  > Quay lại</Button>
     </div>
-    <div>
-        <Button component={Link} secondary
-        to={config.routes.login}  > Logout</Button>
-    </div>
+
 </section>
   )
 
