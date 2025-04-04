@@ -8,6 +8,7 @@ import config from "../../config";
 import authServices from "../../services/authServices";
 import loginSchema from "../../schema/loginSchema";
 import httpRequest from "../../utils/httpRequest";
+import useLoading from "../../hooks/useLoading";
 
 export default function LoginForm() {
   const {
@@ -20,24 +21,28 @@ export default function LoginForm() {
 
   const navigate = useNavigate();
   const [error, setGeneralError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
+  const { setLoading } = useLoading();
   const onSubmit = async (data) => {
-    setIsLoading(true);
+    setLoading(true);
     setGeneralError(""); // Reset lỗi trước khi gửi request
 
     try {
-      const response = await authServices.login(data);
-      if (response?.access_token) {
-        httpRequest.setToken(response.access_token);
-        navigate(config.routes.home);
+      const res = await authServices.login(data)
+      const token = res?.data?.access_token
+      if (token) {
+        console.log("wasjdh");
+        
+        httpRequest.setToken(res?.data?.access_token);
+        navigate(config.routes.home)
       } else {
         setGeneralError("Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.");
       }
     } catch (err) {
-      setGeneralError(err.response?.data?.message || "Đã xảy ra lỗi. Vui lòng thử lại!");
+      setGeneralError(err.res?.data?.message || "Đã xảy ra lỗi. Vui lòng thử lại!");
     } finally {
-      setIsLoading(false);
+      setTimeout(() =>{
+        setLoading(false)
+      },500)
     }
   };
 
@@ -61,7 +66,7 @@ export default function LoginForm() {
           {errors.password && <p className={styles.error}>{errors.password.message}</p>}
         </div>
         {error && <p className={styles.error}>{error}</p>}
-        <Button size="lg" type="submit" isLoading={isLoading}>
+        <Button size="lg" type="submit">
           LOGIN
         </Button>
         <div className={styles.needAccount}>

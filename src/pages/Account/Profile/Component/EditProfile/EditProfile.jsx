@@ -8,13 +8,16 @@ import authServices from "../../../../../services/authServices";
 import config from "../../../../../config";
 import Button from "../../../../../components/Button";
 import { toast } from "react-toastify";
+import useLoading from "../../../../../hooks/useLoading";
 
 // eslint-disable-next-line react/prop-types
 function EditProfile({ user: initialUser }) {
   const [user, setUser] = useState(initialUser);
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
-
+  const [preview, setPreview] = useState("");
+  const [avatar, setAvatar] = useState(null);
+  const [oldAvatar, setOldAvatar] = useState("");
+  const { setLoading } = useLoading();
   const {
     register,
     handleSubmit,
@@ -37,32 +40,69 @@ function EditProfile({ user: initialUser }) {
   });
 
   useEffect(() => {
-    if (!initialUser) {
-      (async () => {
-        try {
-          const response = await authServices.getCurrentUser();
-          if (response.status === "success" && response.user) {
-            setUser(response.user);
-            reset({
-              firstName: response.user.firstName || "",
-              lastName: response.user.lastName || "",
-              age: response.user.age ? String(response.user.age) : "",
-              gender: response.user.gender || "male",
-              email: response.user.email || "",
-              phone: response.user.phone || "",
-              username: response.user.username || "",
-              birthDate: response.user.birthDate || "",
-            });
-          }
-        } catch (error) {
-          console.error("Error fetching user data", error);
+    const fetchUser = async () => {
+      try {
+        const response = await authServices.getCurrentUser();
+        if (response.status === "success" && response.data) {
+          const userData = response.data;
+          setUser(userData);
+          setOldAvatar(userData.avatar || "");
+          setPreview(userData.avatar || "");
+          reset({
+            firstName: userData.firstName || "",
+            lastName: userData.lastName || "",
+            age: userData.age ? String(userData.age) : "",
+            gender: userData.gender || "male",
+            email: userData.email || "",
+            phone: userData.phone || "",
+            username: userData.username || "",
+            birthDate: userData.birthDate || "",
+          });
         }
-      })();
+      } catch (error) {
+        console.error("Error fetching user data", error);
+      }
+    };
+
+    if (!initialUser) {
+      fetchUser();
     }
   }, [initialUser, reset]);
 
+  useEffect(() => {
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (preview) URL.revokeObjectURL(preview);
+      const blob = URL.createObjectURL(file);
+      console.log(blob);
+      
+      setPreview(blob);
+      setAvatar(file);
+    }
+  };
+
+  const handleCancelAvatar = () => {
+    if (preview) URL.revokeObjectURL(preview);
+    setAvatar(null);
+    setPreview(oldAvatar);
+  };
+
   const onSubmit = async (data) => {
-    setIsLoading(true);
+    if (!user?.id) {
+      toast.error("Thông tin người dùng không hợp lệ.");
+      return;
+    }
+
+    setLoading(true);
+
     const requestData = {
       ...data,
       age: data.age ? Number(data.age) : undefined,
@@ -70,10 +110,27 @@ function EditProfile({ user: initialUser }) {
     };
 
     try {
-      const res = await authServices.editProfile(user?.id, requestData);
+      let payload;
+
+      if (avatar) {
+        // Use FormData for avatar upload
+        payload = new FormData();
+        Object.entries(requestData).forEach(([key, value]) => {
+          if (value !== undefined && value !== "") {
+            payload.append(key, value);
+          }
+        });
+        payload.append("image", avatar);
+      } else {
+        payload = requestData;
+      }
+
+      const res = await authServices.editProfile(user.id, payload);
       if (res.status === "success") {
         toast.success("Cập nhật thành công!");
-        setTimeout(() => navigate(config.routes.profile), 500);
+        setTimeout(() => navigate(config.routes.profile), 800);
+      } else {
+        toast.error("Cập nhật thất bại!");
       }
     } catch (error) {
       if (error?.message?.phone) {
@@ -82,7 +139,9 @@ function EditProfile({ user: initialUser }) {
         toast.error("Lỗi cập nhật thông tin!");
       }
     } finally {
-      setIsLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      },500)
     }
   };
 
@@ -90,44 +149,49 @@ function EditProfile({ user: initialUser }) {
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
       <h2>Cập nhật thông tin</h2>
 
+      {/* Avatar section */}
+      <div className={styles.avatarSection}>
+        <h4>Thay đổi Avatar</h4>
+        {preview && <img src={preview} alt="Preview" className={styles.preview} />}
+        <input type="file" accept="image/*" onChange={handleAvatarChange} />
+        {avatar && (
+          <Button type="button" onClick={handleCancelAvatar} size="sm">
+            Hủy thay đổi avatar
+          </Button>
+        )}
+      </div>
+
       <label>First Name</label>
       <input {...register("firstName")} className={styles.input} />
       {errors.firstName && <p className={styles.error}>{errors.firstName.message}</p>}
-    <br />
+
       <label>Last Name</label>
       <input {...register("lastName")} className={styles.input} />
       {errors.lastName && <p className={styles.error}>{errors.lastName.message}</p>}
-      <br />
 
       <label>Age</label>
       <input type="number" {...register("age")} className={styles.input} />
       {errors.age && <p className={styles.error}>{errors.age.message}</p>}
-      <br />
 
       <label>Gender</label>
       <select {...register("gender")} className={styles.input}>
         <option value="male">Nam</option>
         <option value="female">Nữ</option>
       </select>
-      {errors.gender && <p className={styles.error}>{errors.gender.message}</p>}
-      <br />
 
       <label>Email</label>
       <input type="email" {...register("email")} className={styles.input} />
       {errors.email && <p className={styles.error}>{errors.email.message}</p>}
-      <br />
 
       <label>Phone</label>
       <input type="tel" {...register("phone")} className={styles.input} />
       {errors.phone && <p className={styles.error}>{errors.phone.message}</p>}
-      <br />
 
       <label>Username</label>
       <input {...register("username")} className={styles.input} />
       {errors.username && <p className={styles.error}>{errors.username.message}</p>}
-      <br />
 
-      <label>Date of Birth</label>
+      <label>Birth Date</label>
       <Controller
         name="birthDate"
         control={control}
@@ -136,13 +200,13 @@ function EditProfile({ user: initialUser }) {
       {errors.birthDate && <p className={styles.error}>{errors.birthDate.message}</p>}
 
       <div className={styles.buttons}>
-        <Button size="lg" type="button" onClick={() => navigate(-1)} primary> 
+        <Button size="lg" type="button" onClick={() => navigate(-1)}>
           Hủy
         </Button>
-        <Button size="lg" type="submit" isLoading={isLoading} secondary>
+        <Button size="lg" type="submit">
           Cập nhật
         </Button>
-      </div> 
+      </div>
     </form>
   );
 }

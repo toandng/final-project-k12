@@ -1,41 +1,47 @@
 import { useEffect, useState } from "react";
-import {  useNavigate } from "react-router-dom";
-import {  useForm } from 'react-hook-form';
+import { useNavigate } from "react-router-dom";
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import styles from './RegisterForm.module.scss';
 import config from "../../config";
-import authServices from "../../services/authServices"
+import authServices from "../../services/authServices";
 import httpRequest from "../../utils/httpRequest";
 import Button from "../../components/Button";
 import registerSchema from "../../schema/registerSchema";
-let timer;
+import useDebounce from "../../hooks/useDebounce";
+import useLoading from "../../hooks/useLoading";
+
 export default function RegisterForm() {
-  const { 
+  const {
     register, 
     handleSubmit,
     watch,
     trigger,
     setError,
-    formState: { errors } 
+    formState: { errors }
   } = useForm({
     resolver: yupResolver(registerSchema),
   });
+
   const [error, setGeneralError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { setLoading } = useLoading();
+  // Move this before emailValue
+  const emailValue = watch("email");
+  const debounceValue = useDebounce(emailValue, 800);
+
   const navigate = useNavigate();
 
-
   const onSubmit = async (data) => {
-    setIsLoading(true);
+    setLoading(true);
     setGeneralError('');
-
 
     const requestData = {
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
       password: data.password,
-      password_confirmation: data.password_confirmation, 
+      password_confirmation: data.password_confirmation,
     };
 
     try {
@@ -44,40 +50,35 @@ export default function RegisterForm() {
         httpRequest.setToken(response.access_token);
         navigate(config.routes.verifyPhone);
       } else {
-  
         setGeneralError(response.message?.general || 'Đăng ký thất bại');
       }
     } catch (error) {
       console.log(error);
-      
-      
     } finally {
-      setIsLoading(false);
+      setTimeout(() =>{
+        setLoading(false)
+      },500)
     }
   };
 
-  const emailValue = watch("email");
-  
   useEffect(() => {
-    clearTimeout(timer);
-    if (!emailValue) return;
-    
-    timer = setTimeout(async () => {
+    if (!debounceValue) return;
+
+    (async () => {
       const isValid = await trigger("email");
       if (isValid) {
-        console.log("Kiểm tra email:", emailValue);
-        const exists = await authServices.checkEmail(emailValue);
+        console.log("Kiểm tra email:", debounceValue);
+        const exists = await authServices.checkEmail(debounceValue);
         console.log("Kết quả check email:", exists);
-        if(exists) {
+        if (exists) {
           setError("email", {
             type: "manual",
             message: "Email này đã tồn tại..."
-          })
+          });
         }
       }
-    }, 800);
-  
-  }, [emailValue, trigger, setError]);
+    })();
+  }, [debounceValue, trigger, setError]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={`${styles.container}`}>
@@ -91,6 +92,7 @@ export default function RegisterForm() {
         required
       />
       {errors.firstName && <p>{errors.firstName.message}</p>}
+
       <p>Last Name</p>
       <input
         className={`${styles.lastName}`}
@@ -109,6 +111,7 @@ export default function RegisterForm() {
         {...register('email')}
       />
       {errors.email && <p>{errors.email.message}</p>}
+
       <p>Password</p>
       <input
         className={`${styles.password}`}
@@ -116,17 +119,20 @@ export default function RegisterForm() {
         name="password"
         {...register('password')}
       />
-       {errors.password && <p>{errors.password.message}</p>}
+      {errors.password && <p>{errors.password.message}</p>}
+
       <p>Confirm Password</p>
       <input
         className={`${styles.confirmPassword}`}
         type="password"
         {...register('password_confirmation')}
       />
-     {errors.password_confirmation && <p>{errors.password_confirmation.message}</p>}
+      {errors.password_confirmation && <p>{errors.password_confirmation.message}</p>}
+
       {error && <p className={styles.error}>{error}</p>}
-      <Button size="lg" type="submit" isLoading={isLoading}>
-            REGISTER
+
+      <Button size="lg" type="submit">
+        REGISTER
       </Button>
     </form>
   );
