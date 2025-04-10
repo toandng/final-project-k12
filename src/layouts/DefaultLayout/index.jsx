@@ -1,17 +1,17 @@
 import { Outlet } from "react-router-dom";
 
 import Footer from "../DefaultLayout/Component/Footer/Footer";
+import Header from "./Component/Header/Header";
 // import SlideBar from "./components/SlideBar";
 
 function DefaultLayout() {
     return (
-        <>
-            <header />
+        <div style={{ minHeight: "100vh", paddingBottom: "60px"}}>
+           <Header/>
             <main>
                 <div
                     style={{
                         display: "flex",
-                        minHeight: "100vh",
                     }}
                 >
                     {/* <SlideBar /> */}
@@ -31,7 +31,7 @@ function DefaultLayout() {
             </main>
 
             <Footer />
-        </>
+        </div>
     );
 }
 

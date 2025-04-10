@@ -1,0 +1,40 @@
+// Tabs.module.scss
+
+.tabsContainer {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  font-family: sans-serif;
+}
+
+.tabsList {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  justify-content: space-around;
+}
+
+.tabButton {
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+}
+
+.activeTabButton {
+  color: #d23f31;
+  font-weight: bold;
+  border-bottom: 2px solid #d23f31;
+  background-color: #fff;
+}
+
+.tabsContent {
+  padding: 16px;
+}

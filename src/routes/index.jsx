@@ -6,13 +6,13 @@ import VerifyPhone from "../pages/VerifyPhone/phone/VerifyPhoneForm";
 import HomePage from "../pages/Home/HomePage";
 import PrivateRoute from "../components/PrivateRoute";
 import ProfilePage from "../pages/Account/Profile/ProfilePage";
+import History from "../pages/History";
 // import DefaultLayout from "../layouts/DefaultLayout";
 import Features from "../pages/Account/Component/Features";
 import Footer from "../layouts/DefaultLayout/Component/Footer/Footer";
-import DefaultLayout from "../layouts/DefaultLayout";
 import EditProfile from "../pages/Account/Profile/Component/EditProfile/EditProfile";
-
-
+import DefaultLayout from "../layouts/DefaultLayout";
+import NoHeader from "../layouts/DefaultLayout/Component/NoHeader";
 
 
 const routes = [
@@ -25,7 +25,7 @@ const routes = [
     path: config.routes.home,
     component: () => <PrivateRoute component={HomePage} />,
     private: true,
-    layout: Footer
+    layout: DefaultLayout
   },
   {
     path: "/p/:username", // Đường dẫn cho ProfilePage
@@ -33,6 +33,14 @@ const routes = [
     protected: false,
     layout: null
   },
+  // history
+  {
+    path: "/history", // Định nghĩa đường dẫn /profile
+    component: History, // Gán ProfilePage cho /profile
+    protected: false,
+    layout: NoHeader,
+  },
+  // Profile
   {
     path: "/profile", // Định nghĩa đường dẫn /profile
     component: ProfilePage, // Gán ProfilePage cho /profile
@@ -43,7 +51,7 @@ const routes = [
     path: "/features", 
     component: Features, 
     protected: false,
-    layout: DefaultLayout
+    layout: NoHeader,
   },
   {
     path: "/edit", 
@@ -51,6 +59,8 @@ const routes = [
     protected: false,
     layout: null
   },
+
+  // Auth
   {
     path: config.routes.login,
     component: LoginForm,

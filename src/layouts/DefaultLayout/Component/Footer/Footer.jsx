@@ -1,35 +1,50 @@
-
 import styles from "../../Component/Footer/Footer.module.scss";
 import config from "../../../../config";
-import {faFacebook} from "@fortawesome/free-brands-svg-icons"
-import  Button  from "../../../../components/Button/index";
+import Button from "../../../../components/Button";
 import { faBell, faCalendar, faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function Footer() {
-  
-  
-    return (
-      <div>
-          <div className={styles.container}>
-            <div className={styles.foter}>
-              <div>
-                <Button icon={faHouse} normal to={config.routes.home}>Trang chủ</Button>
-              </div>
-              <div>
-                <Button icon={faCalendar} normal to={config.routes.home}>Lịch sử</Button>
-              </div>  
-              <div>
-                <Button icon={faBell} normal to={config.routes.home}>Thông báo</Button>
-              </div>  
-              <div>
-                <Button icon={faFacebook} normal to={config.routes.home}>Thu nhập</Button>
-              </div>  
-              <div>
-                <Button icon={faUser} normal to={config.routes.features}>Tài khoản</Button>
-              </div>  
+
+function Footer({ defaultIndex = 0 }) {
+  const [currentIndex, setCurrentIndex] = useState(defaultIndex);
+
+  const navItems = [
+    { icon: faHouse, label: "Trang chủ", to: config.routes.home },
+    { icon: faCalendar, label: "Lịch sử", to: config.routes.history },
+    { icon: faBell, label: "Thông báo", to: config.routes.notifications },
+    { icon: faUser, label: "Tài khoản", to: config.routes.features },
+  ];
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.footer}>
+        {navItems.map((item, index) => {
+          const active = currentIndex === index;
+          return (
+            <div
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={styles.footerItem}
+            >
+              <Button
+                icon={item.icon}
+                normal
+                to={item.to}
+                className={`${styles.footerButton} ${active ? styles.active : ""}`}
+              >
+             
+                 
+                  <span className={styles.label}>{item.label}</span>
+            
+                          
+              </Button>
             </div>
-        </div>
+          );
+        })}
       </div>
-    );
+    </div>
+  );
 }
+
 export default Footer;

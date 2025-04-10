@@ -7,7 +7,8 @@ const config ={
         verifyPhone: "/verify-phone",
         profile: "/profile",
         features: "/features",
-        edit: "/edit"
+        edit: "/edit",
+        history: "/history"
     }
 }
 export default config;

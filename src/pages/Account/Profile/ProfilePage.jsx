@@ -34,7 +34,7 @@ function ProfilePage() {
     };
 
     fetchUser();
-  }, [setUser]); 
+  }, [setLoading, setUser]); 
   console.log( user);
   
 
