@@ -20,81 +20,74 @@ $background-color: #f8f9fa;
     width: 100%;
     right: 3px;
     font-family: 'Poppins', sans-serif;
+
+    h1{
+      text-align: center;
+    }
+    h2 {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      padding: 15px 10px;
+    }
   
-  h1{
-    text-align: center;
-  }
-  h2 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    padding: 15px 10px;
-  }
-
-  p {
-    color: $text-color;
-    font-size: 17px;
-    opacity: 0.7;
-    margin-bottom: 1.5rem;
-  }
-
-  .login{
-    float: left;
-    margin: 10px auto;
-    font-weight: 600; 
-    font-size: 18px;
-    opacity: 1;
-  }
-  // Nút đăng nhập
-  button {
-    background: #cf770b;
-    color: white;
-    padding: 0.75rem;
-    font-size: 16px;
-    border-radius: 5px;
-    transition: 0.3s ease;
-    position: absolute ;
-    bottom: 18%;
-    width: 90%;
-    right: 20px;
-    border: none;
-
-  }
-  .email{
-    width: 90%;
-    height: 40px;
-    padding: 0px 8px;
-    margin: 10px auto;
-    border: 1px solid #000;
-    border-radius: 5px;
-    background-color: #f8f9fa;
-  }
-  .password{
-    width: 90%;
-    height: 40px;
-    padding: 0px 8px;
-    margin: 10px auto;
-    border: 1px solid #000;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-  }
-  a{
-    position: absolute;
-    font-size: 14x;
-    font-weight: 600;
-    color: blue;
-    right: 30%;
-  }
-  .needAccount{
-    margin: 0px auto;
-    position: absolute;
-    bottom: 0;
-    padding: 20px 28px;
-    right: 0;
-    left: 0;
-  }
-  .span{
-    position: absolute;
-    left: 0;
-  }
+    p{
+      font-size: 12px;
+    }
+    // Nút đăng nhập
+    .buttonLogin button {
+      background: #cf770b;
+      padding: 0.75rem;
+      font-size: 16px;
+      border-radius: 5px;
+      transition: 0.3s ease;
+      position: absolute ;
+      bottom: 10px;
+      width: 90%;
+     right: 1px;
+     left: 16px;
+      border: none;
+      
+    }
+    label{
+      float: left;
+    }
+    .p{
+      font-size: 12px;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    a{
+      position: absolute;
+      font-size: 14x;
+      font-weight: 600;
+      color: blue;
+      right: 30%;
+    }
+    .needAccount{
+      margin: 0px auto;
+      position: absolute;
+      bottom: -55px;
+      padding: 20px 28px;
+      right: 0;
+      left: 0;
+    }
+    .span{
+      position: absolute;
+      left: 0;
+    }
+    .newAccount{
+      margin: 0px -20px;
+    }
+    input{
+      width: 90%;
+      height: 40px;
+      padding: 0px 8px;
+      margin: 10px auto;
+      border: 1px solid #000;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+    
+    }
 }
+ 

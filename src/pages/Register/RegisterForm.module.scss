@@ -5,93 +5,48 @@ $background-color: #f8f9fa;
 .container {
     border-radius: 8px;
     text-align: center;
-    height: 80vh;
     position: relative;
     font-family: 'Poppins', sans-serif;
-  
+
     h1{
       text-align: center;
     }
-    h2 {
-      font-size: 30px;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
 
-    p{
-      float: left;
-      font-weight: 600; 
-      font-size: 19px;
-      margin: 10px;
-     
-    }
-  
-    // Nút đăng nhập
-    button {
-      background: #cf770b;
-      color: white;
-      padding: 0.75rem;
-      font-size: 16px;
-      border-radius: 5px;
-      transition: 0.3s ease;
-      position: absolute ;
-      bottom: -100px;
-      width: 100%;
-      right: 0;
-      border: none;
-    } 
-  .firstName{
-    width: 90%;
-    height: 40px;
-    padding: 0px 8px;
-    margin: 10px auto;
-    border: 1px solid #000;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-  }
-  .lastName{
-    width: 90%;
-    height: 40px;
-    padding: 0px 8px;
-    margin: 10px auto;
-    border: 1px solid #000;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-
-  }
-  .email{
-    width: 90%;
-    height: 40px;
-    padding: 0px 8px;
-    margin: 10px auto;
-    border: 1px solid #000;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-
-  }
-  .password{
-    width: 90%;
-    height: 40px;
-    padding: 0px 8px;
-    margin: 10px auto;
-    border: 1px solid #000;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-
-  }
-  .confirmPassword{
-    width: 90%;
-    height: 40px;
-    padding: 0px 8px;
-    margin: 10px auto;
-    border: 1px solid #000;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-
-  }
   .error{
     color: red;
   }
 
+
+input{
+  width: 90%;
+  height: 40px;
+  padding: 0px 8px;
+  margin: 10px auto;
+  border: 1px solid #000;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+
 }
-  
+p{
+  color: #000;
+  font-size: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  float: left;
+}
+.buttonRegster {
+  background: #cf770b;
+  color: white;
+  padding: 0.75rem;
+  font-size: 16px;
+  border-radius: 5px;
+  transition: 0.3s ease;
+  position: absolute ;
+  bottom: -100px;
+  width: 90%;
+ right: 1px;
+ left: 16px;
+  border: none;
+} 
+}
+   
