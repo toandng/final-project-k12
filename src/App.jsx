@@ -1,12 +1,14 @@
 import {BrowserRouter} from "react-router-dom"
 import AppRoute from "./components/AppRoute"
+import UserProvider from "./components/UserProvider"
+
 
 function App() {
-
-
   return (
     <BrowserRouter>
-        <AppRoute/>
+    <UserProvider />
+ 
+    <AppRoute/>
     </BrowserRouter>
   )
 }

@@ -28,9 +28,12 @@ function  Tabs({
         setCurrentIndex(index);
       }
     };
+    
+
   
     return (
       <div className={`${styles.tabsContainer} ${className}`}>
+        
         <div className={`${styles.tabsList} ${tabListClassName}`}>
           {tabs.map((tab, index) => {
             const active = currentIndex === index;
