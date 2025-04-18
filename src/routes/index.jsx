@@ -13,6 +13,7 @@ import Footer from "../layouts/DefaultLayout/Component/Footer/Footer";
 import EditProfile from "../pages/Account/Profile/Component/EditProfile/EditProfile";
 import DefaultLayout from "../layouts/DefaultLayout";
 import NoHeader from "../layouts/DefaultLayout/Component/NoHeader";
+import VerifyCard from "../pages/VerifyIndentity/VerifyCard/VerifyCard";
 
 
 const routes = [
@@ -73,9 +74,16 @@ const routes = [
     protected: false,
     layout:null
   },
+  // Verify
   {
     path: config.routes.verifyPhone,
     component: VerifyPhone,
+    protected: false,
+    layout: null
+  },
+  {
+    path: config.routes.verifyCard,
+    component: VerifyCard,
     protected: false,
     layout: null
   },

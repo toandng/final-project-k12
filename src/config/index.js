@@ -8,7 +8,8 @@ const config ={
         profile: "/profile",
         features: "/features",
         edit: "/edit",
-        history: "/history"
+        history: "/history",
+        verifyCard: "/verify-card",
     }
 }
 export default config;

@@ -16,6 +16,14 @@ $background-color: #f8f9fa;
     color: red;
   }
 
+  .activeStep{
+    word-wrap: 100%;
+    display: grid;
+  }
+  .schema{
+    font-size: 12px;
+    color: red;
+  }
 
 input{
   width: 90%;
@@ -47,6 +55,8 @@ p{
  right: 1px;
  left: 16px;
   border: none;
+  text-transform: uppercase;
+  color: #333;
+  font-weight: 600;
 } 
 }
-   
