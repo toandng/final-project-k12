@@ -1,21 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
 import styles from "./LoginForm.module.scss";
 import Button from "../../components/Button";
 import config from "../../config";
 import httpRequest from "../../utils/httpRequest";
-// import useLoading from "../../hooks/useLoading";
 import Form, { TextInput } from "../../components/Forms";
 import authServices from "../../services/authServices";
 import { toast, ToastContainer } from "react-toastify";
+import useUser from "../../hooks/useUser";
 import "react-toastify/dist/ReactToastify.css";
+import { fetchAuthUser } from "../../features/auth/authSlice";
 
 export default function LoginForm() {
   const [error, setGeneralError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const { setLoading } = useLoading();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const user = useUser();
+
+  useEffect(() => {
+    if (user) {
+      navigate(config.routes.home, { replace: true });
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (data) => {
     // setLoading(true);
@@ -25,12 +36,10 @@ export default function LoginForm() {
       toast.error("Email is required to sign in");
       // setLoading(false);
       return;
-    }
-    else if (!data.password) {
+    } else if (!data.password) {
       toast.error("Password is required to sign in");
       return;
     }
-
 
     const formData = {
       email: data.email,
@@ -39,19 +48,24 @@ export default function LoginForm() {
 
     try {
       const res = await authServices.login(formData);
+
       const token = res.data?.access_token;
       if (token) {
         httpRequest.setToken(token);
+
+        dispatch(fetchAuthUser());
+        navigate(config.routes.home);
+
         toast.success("Login successful!");
-        setTimeout(()=> {
-          navigate(config.routes.home);
-        },1000)
-      
       } else {
-        setGeneralError("Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.");
+        setGeneralError(
+          "Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu."
+        );
       }
     } catch (err) {
-      setGeneralError(err.response?.data?.message || "Đã xảy ra lỗi. Vui lòng thử lại!");
+      setGeneralError(
+        err.response?.data?.message || "Đã xảy ra lỗi. Vui lòng thử lại!"
+      );
     } finally {
       setTimeout(() => {
         // setLoading(false);
@@ -68,7 +82,9 @@ export default function LoginForm() {
       <Form onSubmit={handleSubmit}>
         <div>
           <h2>Welcome to Scrap Plan</h2>
-          <p className={styles.p}>Create an account or login to join your orders</p>
+          <p className={styles.p}>
+            Create an account or login to join your orders
+          </p>
         </div>
 
         <label className={styles.login}>Email</label>
@@ -98,7 +114,11 @@ export default function LoginForm() {
 
         <div className={styles.needAccount}>
           <span className={styles.span}>Don&apos;t have an account?</span>
-          <Button className={styles.newAccount} type="Link" to={config.routes.register}>
+          <Button
+            className={styles.newAccount}
+            type="Link"
+            to={config.routes.register}
+          >
             Register here!
           </Button>
         </div>

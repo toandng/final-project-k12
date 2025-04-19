@@ -1,13 +1,15 @@
-import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import {actions as authActions} from "../../reducers/auth";
+
+import useDispatch from "../../hooks/useDispatch";
+import { fetchAuthUser } from "../../features/auth/authSlice";
 
 function UserProvider() {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-      dispatch((authActions.getCurrentUser()));
-      
-    },[dispatch])
+  useEffect(() => {
+    dispatch(fetchAuthUser());
+  }, [dispatch]);
+
+  return null;
 }
 export default UserProvider;

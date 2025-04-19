@@ -1,30 +1,24 @@
 import { Navigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
-import { useContext } from "react";
-import { config } from "@fortawesome/fontawesome-svg-core";
+import { useSelector } from "react-redux";
+import config from "../../config";
 
 function ProtectedRoute({ children }) {
-  const token = localStorage.getItem("token");
   const location = useLocation();
-  const userContext = useContext()
+  const auth = useSelector((state) => state.auth);
 
-  if(userContext.loading) {
-    return <div>Loading...</div>
+  if (auth.loading) {
+    return <div>Loading...</div>;
   }
-  if(userContext.user) {
+
+  if (!auth.user) {
     const path = encodeURIComponent(location.pathname);
-    return <Navigate to={`${config.routes.login}?continue${path}`} />
+    console.log(path);
   }
 
-
-  if (!token) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  
   return children;
 }
-  
+
 ProtectedRoute.propTypes = {
   children: PropTypes.element.isRequired,
 };

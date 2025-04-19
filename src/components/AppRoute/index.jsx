@@ -7,34 +7,34 @@ import ProtectedRoute from "../ProtectedRoute";
 import { Fragment } from "react";
 
 function AppRoutes() {
-    return (
-        <Routes>
-            {routes.map((route) => {
-                const Layout =
-                    route.layout === undefined
-                        ? DefaultLayout
-                        : route.layout || NoLayout;
+  return (
+    <Routes>
+      {routes.map((route) => {
+        const Layout =
+          route.layout === undefined ? DefaultLayout : route.layout || NoLayout;
 
-                const Component = route.component;
+        const Component = route.component;
 
-                const RouteElement = route.protected
-                    ? ProtectedRoute
-                    : Fragment;
-                return (
-                    <Route key={route.path} element={<Layout />}>
-                        <Route
-                            path={route.path}
-                            element={
-                                <RouteElement>
-                                    <Component />
-                                </RouteElement>
-                            }
-                        />
-                    </Route>
-                );
-            })}
-        </Routes>
-    );
+        const RouteElement =
+          route.protected === void 0 || route.protected
+            ? ProtectedRoute
+            : Fragment;
+
+        return (
+          <Route key={route.path} element={<Layout />}>
+            <Route
+              path={route.path}
+              element={
+                <RouteElement>
+                  <Component />
+                </RouteElement>
+              }
+            />
+          </Route>
+        );
+      })}
+    </Routes>
+  );
 }
 
 export default AppRoutes;
