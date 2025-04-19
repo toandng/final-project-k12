@@ -4,7 +4,7 @@ import { createContext } from "react";
 // eslint-disable-next-line react-refresh/only-export-components
 export const ReduxContext = createContext();
 
-function UserProvider({ children, store }) {
+function ReduxProvider({ children, store }) {
    
 
     return (
@@ -12,8 +12,8 @@ function UserProvider({ children, store }) {
     );
 }
 
-export default UserProvider;
-UserProvider.propTypes = {
+export default ReduxProvider;
+ReduxProvider.propTypes = {
     children: PropTypes.node.isRequired,
     store: PropTypes.object,
 
