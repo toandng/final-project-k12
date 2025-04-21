@@ -8,10 +8,10 @@ import config from "../../config";
 import httpRequest from "../../utils/httpRequest";
 import Form, { TextInput } from "../../components/Forms";
 import authServices from "../../services/authServices";
-import { toast, ToastContainer } from "react-toastify";
 import useUser from "../../hooks/useUser";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchAuthUser } from "../../features/auth/authSlice";
+import { toast } from "react-toastify";
 
 export default function LoginForm() {
   const [error, setGeneralError] = useState("");
@@ -54,9 +54,9 @@ export default function LoginForm() {
         httpRequest.setToken(token);
 
         dispatch(fetchAuthUser());
-        navigate(config.routes.home);
-
         toast.success("Login successful!");
+
+        navigate(config.routes.home);
       } else {
         setGeneralError(
           "Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu."
@@ -122,8 +122,6 @@ export default function LoginForm() {
             Register here!
           </Button>
         </div>
-
-        <ToastContainer position="top-center" autoClose={2000} />
       </Form>
     </div>
   );
