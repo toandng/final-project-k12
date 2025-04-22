@@ -12,28 +12,36 @@ import NoHeader from "../layouts/DefaultLayout/Component/NoHeader";
 import VerifyCard from "../pages/VerifyIndentity/VerifyCard/VerifyCard";
 
 const routes = [
+  // Trang chủ
   {
     path: config.routes.home,
     component: HomePage,
     layout: DefaultLayout,
   },
+  // Trang profile (của người khác)
   {
-    path: "/p/:username", // Đường dẫn cho ProfilePage
-    component: ProfilePage, // Component của ProfilePage
+    path: "/users/:username",
+    component: ProfilePage,
     layout: null,
   },
-  // history
   {
-    path: "/history", // Định nghĩa đường dẫn /profile
-    component: History, // Gán ProfilePage cho /profile
+    path: "/users/:username",
+    component: EditProfile,
+    layout: null,
+  },
+  // Trang lịch sử
+  {
+    path: "/history",
+    component: History,
     layout: NoHeader,
   },
-  // Profile
+  // Profile của chính mình
   {
-    path: "/profile", // Định nghĩa đường dẫn /profile
-    component: ProfilePage, // Gán ProfilePage cho /profile
+    path: "/profile",
+    component: ProfilePage,
     layout: null,
   },
+  // Các chức năng trong profile
   {
     path: "/features",
     component: Features,
@@ -57,7 +65,8 @@ const routes = [
     component: Register,
     layout: null,
   },
-  // Verify
+
+  // Xác minh
   {
     path: config.routes.verifyPhone,
     component: VerifyPhone,

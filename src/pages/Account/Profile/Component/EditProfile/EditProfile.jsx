@@ -83,7 +83,7 @@ function EditProfile({ user: initialUser }) {
       if (preview) URL.revokeObjectURL(preview);
       const blob = URL.createObjectURL(file);
       console.log(blob);
-      
+
       setPreview(blob);
       setAvatar(file);
     }
@@ -128,7 +128,7 @@ function EditProfile({ user: initialUser }) {
       const res = await authServices.editProfile(user.id, payload);
       if (res.status === "success") {
         toast.success("Cập nhật thành công!");
-        setTimeout(() => navigate(config.routes.profile), 800);
+        setTimeout(() => navigate(config.routes.features), 800);
       } else {
         toast.error("Cập nhật thất bại!");
       }
@@ -141,7 +141,7 @@ function EditProfile({ user: initialUser }) {
     } finally {
       setTimeout(() => {
         setLoading(false);
-      },500)
+      }, 500);
     }
   };
 
@@ -152,7 +152,9 @@ function EditProfile({ user: initialUser }) {
       {/* Avatar section */}
       <div className={styles.avatarSection}>
         <h4>Thay đổi Avatar</h4>
-        {preview && <img src={preview} alt="Preview" className={styles.preview} />}
+        {preview && (
+          <img src={preview} alt="Preview" className={styles.preview} />
+        )}
         <input type="file" accept="image/*" onChange={handleAvatarChange} />
         {avatar && (
           <Button type="button" onClick={handleCancelAvatar} size="sm">
@@ -163,11 +165,15 @@ function EditProfile({ user: initialUser }) {
 
       <label>First Name</label>
       <input {...register("firstName")} className={styles.input} />
-      {errors.firstName && <p className={styles.error}>{errors.firstName.message}</p>}
+      {errors.firstName && (
+        <p className={styles.error}>{errors.firstName.message}</p>
+      )}
 
       <label>Last Name</label>
       <input {...register("lastName")} className={styles.input} />
-      {errors.lastName && <p className={styles.error}>{errors.lastName.message}</p>}
+      {errors.lastName && (
+        <p className={styles.error}>{errors.lastName.message}</p>
+      )}
 
       <label>Age</label>
       <input type="number" {...register("age")} className={styles.input} />
@@ -189,15 +195,21 @@ function EditProfile({ user: initialUser }) {
 
       <label>Username</label>
       <input {...register("username")} className={styles.input} />
-      {errors.username && <p className={styles.error}>{errors.username.message}</p>}
+      {errors.username && (
+        <p className={styles.error}>{errors.username.message}</p>
+      )}
 
       <label>Birth Date</label>
       <Controller
         name="birthDate"
         control={control}
-        render={({ field }) => <input type="date" {...field} className={styles.input} />}
+        render={({ field }) => (
+          <input type="date" {...field} className={styles.input} />
+        )}
       />
-      {errors.birthDate && <p className={styles.error}>{errors.birthDate.message}</p>}
+      {errors.birthDate && (
+        <p className={styles.error}>{errors.birthDate.message}</p>
+      )}
 
       <div className={styles.buttons}>
         <Button size="lg" type="button" onClick={() => navigate(-1)}>

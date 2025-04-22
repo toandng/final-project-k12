@@ -1,28 +1,28 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import authServices from "../../../services/authServices";
 import styles from "../Profile/ProfilePage.module.scss";
 import { Button } from "@mui/material";
-import { Link } from "react-router-dom";
 import config from "../../../config";
-import useUser from "../../../hooks/useUser";
 import useLoading from "../../../hooks/useLoading";
 
 function ProfilePage() {
-  const [user, setUser] = useUser();
+  const { username } = useParams();
+  const [user, setUser] = useState(null);
   const { setLoading } = useLoading();
 
   useEffect(() => {
     setLoading(true);
     const fetchUser = async () => {
       try {
-        const res = await authServices.getCurrentUser();
+        const res = await authServices.getUserByUsername(username);
         if (res?.data) {
           setUser(res.data);
         } else {
-          console.log("Lỗi khi tải dữ liệu người dùng");
+          console.log("Không tìm thấy người dùng");
         }
       } catch (error) {
-        console.log("Lỗi kết nối API", error);
+        console.log("Lỗi khi tải thông tin người dùng:", error);
       } finally {
         setTimeout(() => {
           setLoading(false);
@@ -30,11 +30,14 @@ function ProfilePage() {
       }
     };
 
-    fetchUser();
-  }, [setLoading, setUser]);
-  console.log(user);
+    if (username) {
+      fetchUser();
+    }
+  }, [username, setLoading]);
 
   const getDisplayValue = (value) => (value ? value : "Chưa cập nhật");
+
+  if (!user) return <p>Đang tải...</p>;
 
   return (
     <section className={styles.wrapper}>
@@ -47,13 +50,12 @@ function ProfilePage() {
 
       <div className={styles.avatarContainer}>
         <h2>Ảnh đại diện</h2>
-        {/* Kiểm tra nếu user có avatar */}
         {user?.avatar ? (
           <img
             src={
-              user?.avatar?.startsWith("http")
+              user.avatar.startsWith("http")
                 ? user.avatar
-                : `${import.meta.env.VITE_API_URL}/${user?.avatar}`
+                : `${import.meta.env.VITE_BASE_URL}/${user.avatar}`
             }
             alt="Avatar"
             className={styles.avatar}
@@ -68,32 +70,32 @@ function ProfilePage() {
 
       <div className={styles.content}>
         <p>
-          <strong>Tên đầy đủ:</strong> {user?.firstName} {user?.lastName}
+          <strong>Tên đầy đủ:</strong> {user.firstName} {user.lastName}
         </p>
         <p>
-          <strong>Tuổi:</strong> {getDisplayValue(user?.age)}
+          <strong>Tuổi:</strong> {getDisplayValue(user.age)}
         </p>
         <p>
-          <strong>Giới tính:</strong> {getDisplayValue(user?.gender)}
+          <strong>Giới tính:</strong> {getDisplayValue(user.gender)}
         </p>
         <p>
-          <strong>Email:</strong> {user?.email}
+          <strong>Email:</strong> {user.email}
         </p>
         <p>
-          <strong>Số điện thoại:</strong> {getDisplayValue(user?.phone)}
+          <strong>Số điện thoại:</strong> {getDisplayValue(user.phone)}
         </p>
         <p>
-          <strong>Ngày sinh:</strong> {getDisplayValue(user?.birthDate)}
+          <strong>Ngày sinh:</strong> {getDisplayValue(user.birthDate)}
         </p>
         <p>
           <strong>Trạng thái tài khoản:</strong>{" "}
-          {user?.emailVerifiedAt
+          {user.emailVerifiedAt
             ? "Tài khoản đã được xác minh"
             : "Tài khoản chưa xác minh"}
         </p>
         <p>
           <strong>Ngày tạo:</strong>{" "}
-          {new Date(user?.createdAt).toLocaleDateString()}
+          {new Date(user.createdAt).toLocaleDateString()}
         </p>
       </div>
 
