@@ -1,15 +1,13 @@
-
-
-import  { useState, useEffect } from 'react';
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Button from '@mui/material/Button';
-import styles from './VerifyPhoneForm.module.scss'
-import {NavLink} from "react-router-dom"
-import config from "../../../config";
-const steps = [' ', ' ', ' '];
+import { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
+import Box from "@mui/material/Box";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Button from "@mui/material/Button";
+import styles from "./VerifyPhoneForm.module.scss";
+import config from "@/config";
+const steps = [" ", " ", " "];
 
 const VerifyPhoneForm = () => {
   const [activeStep] = useState(0);
@@ -27,7 +25,7 @@ const VerifyPhoneForm = () => {
 
   const handleInputChange = (e, index) => {
     const value = e.target.value;
-    if (!/^\d?$/.test(value)) return; 
+    if (!/^\d?$/.test(value)) return;
 
     const newCode = [...code];
     newCode[index] = value;
@@ -42,15 +40,15 @@ const VerifyPhoneForm = () => {
 
   const handleResend = () => {
     setResendTimer(30);
-    console.log('Đang gửi lại mã...');
+    console.log("Đang gửi lại mã...");
   };
 
   const handleSubmit = () => {
-    const enteredCode = code.join('');
-    if (enteredCode === '123456') {
-      alert('Xác minh thành công!');
+    const enteredCode = code.join("");
+    if (enteredCode === "123456") {
+      alert("Xác minh thành công!");
     } else {
-      alert('Mã xác nhận không hợp lệ. Vui lòng thử lại.');
+      alert("Mã xác nhận không hợp lệ. Vui lòng thử lại.");
     }
   };
 
@@ -70,7 +68,7 @@ const VerifyPhoneForm = () => {
         </Stepper>
       </Box>
 
-      <div >
+      <div>
         <h2>Verify email number</h2>
         <p>
           Enter the 6-digit code sent to <span>email</span>
@@ -91,21 +89,24 @@ const VerifyPhoneForm = () => {
 
         <div className={`${styles.sendMessage}`}>
           {resendTimer > 0 ? (
-            <p >
-              Gửi lại mã sau <span >{resendTimer}</span> giây
+            <p>
+              Gửi lại mã sau <span>{resendTimer}</span> giây
             </p>
           ) : (
-            <button onClick={handleResend} >
-              Gửi lại mã
-            </button>
+            <button onClick={handleResend}>Gửi lại mã</button>
           )}
         </div>
 
-        <Button variant="contained"  className={`${styles.submit}`} fullWidth onClick={handleSubmit}>
-            <NavLink to={config.routes.verifyPhone}>Verify Code</NavLink>
+        <Button
+          variant="contained"
+          className={`${styles.submit}`}
+          fullWidth
+          onClick={handleSubmit}
+        >
+          <NavLink to={config.routes.verifyPhone}>Verify Code</NavLink>
         </Button>
 
-        <footer >
+        <footer>
           <NavLink>Need help? Contact Support</NavLink>
         </footer>
       </div>

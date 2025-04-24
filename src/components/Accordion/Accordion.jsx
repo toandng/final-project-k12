@@ -31,8 +31,12 @@ function Accordion({
   const toggleIndex = (index) => {
     const isOpen = openIndices.includes(index);
     const next = collapseOthers
-      ? isOpen ? [] : [index]
-      : isOpen ? openIndices.filter((i) => i !== index) : [...openIndices, index];
+      ? isOpen
+        ? []
+        : [index]
+      : isOpen
+      ? openIndices.filter((i) => i !== index)
+      : [...openIndices, index];
 
     const changed = JSON.stringify(openIndices) !== JSON.stringify(next);
     if (changed) {
@@ -67,7 +71,9 @@ function Accordion({
         return (
           <div
             key={index}
-            className={`${styles.accordionItem} ${isOpen ? openItemClassName : ""}`}
+            className={`${styles.accordionItem} ${
+              isOpen ? openItemClassName : ""
+            }`}
           >
             <button
               ref={(el) => (headerRefs.current[index] = el)}
@@ -78,12 +84,11 @@ function Accordion({
               aria-expanded={isOpen}
               aria-controls={`accordion-content-${index}`}
             >
-                <FontAwesomeIcon
+              <FontAwesomeIcon
                 icon={isOpen ? faChevronUp : faChevronDown}
                 className="mr-2 transition-transform duration-300"
-                />
-                {header}
-
+              />
+              {header}
             </button>
             {isOpen && (
               <div
@@ -101,14 +106,13 @@ function Accordion({
 }
 
 Accordion.propTypes = {
-    children: PropTypes.node.isRequired,
-    defaultIndex: PropTypes.number,
-    onChange: PropTypes.func,
-    collapseOthers: PropTypes.bool,
-    className: PropTypes.string,
-    openItemClassName :PropTypes.string,
-    accordionHeader  :PropTypes.string,
-    accordionConten  :PropTypes.string,
-
-}
+  children: PropTypes.node.isRequired,
+  defaultIndex: PropTypes.number,
+  onChange: PropTypes.func,
+  collapseOthers: PropTypes.bool,
+  className: PropTypes.string,
+  openItemClassName: PropTypes.string,
+  accordionHeader: PropTypes.string,
+  accordionConten: PropTypes.string,
+};
 export default Accordion;

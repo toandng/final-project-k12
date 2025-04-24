@@ -1,12 +1,12 @@
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import authServices from "../../../services/authServices";
-import useLoading from "../../../hooks/useLoading";
-import { Accordion, AccordionItem } from "../../../components/Accordion";
+import authServices from "@/services/authServices";
+import useLoading from "@/hooks/useLoading";
+import { Accordion, AccordionItem } from "@/components/Accordion";
 import styles from "../Component/Features.module.scss";
-import { logoutUser } from "../../../features/auth/authSlice";
-import { useDispatch } from "react-redux";
+import { logoutUser } from "@/features/auth/authSlice";
 
 function Features() {
   const [user, setUser] = useState(null);

@@ -3,20 +3,20 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import styles from "./LoginForm.module.scss";
-import Button from "../../components/Button";
-import config from "../../config";
-import httpRequest from "../../utils/httpRequest";
-import Form, { TextInput } from "../../components/Forms";
-import authServices from "../../services/authServices";
-import useUser from "../../hooks/useUser";
-import "react-toastify/dist/ReactToastify.css";
-import { fetchAuthUser } from "../../features/auth/authSlice";
+import Button from "@/components/button";
+import config from "@/config";
+import Form, { TextInput } from "@/components/Forms";
+import useUser from "@/hooks/useUser";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { loginUser, fetchAuthUser } from "../../features/auth/authSlice";
 
 export default function LoginForm() {
   const [error, setGeneralError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -29,47 +29,32 @@ export default function LoginForm() {
   }, [user, navigate]);
 
   const handleSubmit = async (data) => {
-    // setLoading(true);
     setGeneralError("");
 
     if (!data.email) {
       toast.error("Email is required to sign in");
-      // setLoading(false);
       return;
     } else if (!data.password) {
       toast.error("Password is required to sign in");
       return;
     }
 
-    const formData = {
-      email: data.email,
-      password: data.password,
-    };
-
     try {
-      const res = await authServices.login(formData);
+      const resultAction = await dispatch(
+        loginUser({ email: data.email, password: data.password })
+      );
 
-      const token = res.data?.access_token;
-      if (token) {
-        httpRequest.setToken(token);
-
-        dispatch(fetchAuthUser());
+      if (loginUser.fulfilled.match(resultAction)) {
         toast.success("Login successful!");
-
+        dispatch(fetchAuthUser()); // get user data
         navigate(config.routes.home);
       } else {
-        setGeneralError(
-          "Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu."
-        );
+        setGeneralError(resultAction.payload || "Login failed.");
       }
     } catch (err) {
-      setGeneralError(
-        err.response?.data?.message || "Đã xảy ra lỗi. Vui lòng thử lại!"
-      );
-    } finally {
-      setTimeout(() => {
-        // setLoading(false);
-      }, 300); // faster feedback
+      console.log(err);
+
+      setGeneralError("Something went wrong. Please try again.");
     }
   };
 

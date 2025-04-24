@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
-import useDispatch from "../../hooks/useDispatch";
-import { fetchAuthUser } from "../../features/auth/authSlice";
+import useDispatch from "@/hooks/useDispatch";
+import { fetchAuthUser } from "@/features/auth/authSlice";
 
 function UserProvider() {
   const dispatch = useDispatch();

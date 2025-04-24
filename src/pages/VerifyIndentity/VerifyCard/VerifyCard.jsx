@@ -1,23 +1,23 @@
-import { useState, useEffect } from 'react';
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import styles from './VerifyCard.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCamera } from '@fortawesome/free-solid-svg-icons';
-import Button from '../../../components/Button';
-import { NavLink } from 'react-router-dom';
-import config from '../../../config';
+import { useState, useEffect } from "react";
+import Box from "@mui/material/Box";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import styles from "./VerifyCard.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCamera } from "@fortawesome/free-solid-svg-icons";
+import Button from "@/components/Button";
+import { NavLink } from "react-router-dom";
+import config from "@/config";
 
-const steps = [' ', ' ', ' '];
+const steps = [" ", " ", " "];
 
 const VerifyPhoneForm = () => {
   const [activeStep] = useState(1);
   const [frontImg, setFrontImg] = useState(null);
-  const [frontPreview, setFrontPreview] = useState('');
+  const [frontPreview, setFrontPreview] = useState("");
   const [backImg, setBackImg] = useState(null);
-  const [backPreview, setBackPreview] = useState('');
+  const [backPreview, setBackPreview] = useState("");
 
   useEffect(() => {
     return () => {
@@ -31,7 +31,7 @@ const VerifyPhoneForm = () => {
     if (!file) return;
 
     const blob = URL.createObjectURL(file);
-    if (side === 'front') {
+    if (side === "front") {
       if (frontPreview) URL.revokeObjectURL(frontPreview);
       setFrontPreview(blob);
       setFrontImg(file);
@@ -44,18 +44,25 @@ const VerifyPhoneForm = () => {
 
   return (
     <div className={styles.container}>
-      <p>Step {activeStep + 1} of {steps.length}</p>
+      <p>
+        Step {activeStep + 1} of {steps.length}
+      </p>
 
       <Box>
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map((_, index) => (
-            <Step key={index}><StepLabel /></Step>
+            <Step key={index}>
+              <StepLabel />
+            </Step>
           ))}
         </Stepper>
       </Box>
 
       <h2>Verify driver identity</h2>
-      <p>Please upload a photo of your ID card & driver license to confirm your identity</p>
+      <p>
+        Please upload a photo of your ID card & driver license to confirm your
+        identity
+      </p>
 
       <h4>Upload driver’s license</h4>
       <div className={styles.grid}>
@@ -65,15 +72,18 @@ const VerifyPhoneForm = () => {
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => handleImgChange(e, 'front')}
+            onChange={(e) => handleImgChange(e, "front")}
             hidden
           />
           {frontPreview ? (
-            <img src={frontPreview} alt="Front Preview" className={styles.previewImg} />
+            <img
+              src={frontPreview}
+              alt="Front Preview"
+              className={styles.previewImg}
+            />
           ) : (
             <div className={styles.placeholder}>
-                  <FontAwesomeIcon icon={faCamera} className={styles.cameraIcon} />
-
+              <FontAwesomeIcon icon={faCamera} className={styles.cameraIcon} />
             </div>
           )}
         </label>
@@ -84,25 +94,25 @@ const VerifyPhoneForm = () => {
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => handleImgChange(e, 'back')}
+            onChange={(e) => handleImgChange(e, "back")}
             hidden
           />
           {backPreview ? (
-            <img src={backPreview} alt="Back Preview" className={styles.previewImg} />
+            <img
+              src={backPreview}
+              alt="Back Preview"
+              className={styles.previewImg}
+            />
           ) : (
             <div className={styles.placeholder}>
-               <FontAwesomeIcon icon={faCamera} className={styles.cameraIcon} />
-
+              <FontAwesomeIcon icon={faCamera} className={styles.cameraIcon} />
             </div>
-            
           )}
-          
         </label>
         <Button variant="contained" className={styles.submit}>
-            <NavLink to={config.routes.home}>Verify ID Card</NavLink>
+          <NavLink to={config.routes.home}>Verify ID Card</NavLink>
         </Button>
       </div>
-      
     </div>
   );
 };

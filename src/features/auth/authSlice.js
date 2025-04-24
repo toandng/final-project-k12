@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import authServices from "../../services/authServices";
+import httpRequest from "../../utils/httpRequest";
 
 const initialState = {
   user: null,
@@ -13,6 +14,28 @@ export const fetchAuthUser = createAsyncThunk(
     return data.data;
   }
 );
+// loginUser
+export const loginUser = createAsyncThunk(
+  "auth/loginUser",
+  async ({ email, password }, { rejectWithValue }) => {
+    try {
+      const res = await authServices.login({ email, password });
+      const token = res.data?.access_token;
+      if (token) {
+        httpRequest.setToken(token);
+        return res.data;
+      } else {
+        return rejectWithValue("Thông tin đăng nhập không hợp lệ");
+      }
+    } catch (error) {
+      return rejectWithValue(
+        error.respone?.data?.message ||
+          "Đăng nhập thất bại. Vui lòng điền lại thông tin"
+      );
+    }
+  }
+);
+
 // logoutUser
 export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
   const data = await authServices.logout();
@@ -46,6 +69,17 @@ const authSlile = createSlice({
       })
       .addCase(logoutUser.rejected, (state) => {
         state.currentUser = null;
+        state.loading = false;
+      })
+
+      // login
+
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.loading = false;
+      })
+      .addCase(loginUser.rejected, (state) => {
+        state.user = null;
         state.loading = false;
       });
   },

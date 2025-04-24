@@ -1,15 +1,15 @@
-import config from "../config";
-import LoginForm from "../pages/Login/LoginForm";
-import Register from "../pages/Register/RegisterForm";
-import VerifyPhone from "../pages/VerifyPhone/phone/VerifyPhoneForm";
-import HomePage from "../pages/Home/HomePage";
-import ProfilePage from "../pages/Account/Profile/ProfilePage";
-import History from "../pages/History";
-import Features from "../pages/Account/Component/Features";
-import EditProfile from "../pages/Account/Profile/Component/EditProfile/EditProfile";
-import DefaultLayout from "../layouts/DefaultLayout";
-import NoHeader from "../layouts/DefaultLayout/Component/NoHeader";
-import VerifyCard from "../pages/VerifyIndentity/VerifyCard/VerifyCard";
+import config from "@/config";
+import LoginForm from "@/pages/Login/LoginForm";
+import Register from "@/pages/Register/RegisterForm";
+import VerifyPhone from "@/pages/VerifyPhone/phone/VerifyPhoneForm";
+import HomePage from "@/pages/Home/HomePage";
+import ProfilePage from "@/pages/Account/Profile/ProfilePage";
+import History from "@/pages/History";
+import Features from "@/pages/Account/Component/Features";
+import EditProfile from "@/pages/Account/Profile/Component/EditProfile/EditProfile";
+import DefaultLayout from "@/layouts/DefaultLayout";
+import NoHeader from "@/layouts/DefaultLayout/Component/NoHeader";
+import VerifyCard from "@/pages/VerifyIndentity/VerifyCard/VerifyCard";
 
 const routes = [
   // Trang chủ
