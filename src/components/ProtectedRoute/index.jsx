@@ -6,7 +6,14 @@ function ProtectedRoute({ children }) {
   const location = useLocation();
   const auth = useSelector((state) => state.auth);
 
-  const publicPaths = ["/login", "/register", "/verify-phone", "/verify-card"];
+  const publicPaths = [
+    "/login",
+    "/register",
+    "/verify-phone",
+    "/verify-card",
+    "/dirver-form",
+    "/vehicle",
+  ];
 
   if (auth.loading) {
     return <div>Loading...</div>;

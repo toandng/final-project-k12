@@ -3,9 +3,9 @@ import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import styles from "./VerifyCard.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
+import styles from "./Component/VerifyCard.module.scss";
 import Button from "@/components/Button";
 import { NavLink } from "react-router-dom";
 import config from "@/config";
@@ -110,7 +110,7 @@ const VerifyPhoneForm = () => {
           )}
         </label>
         <Button variant="contained" className={styles.submit}>
-          <NavLink to={config.routes.home}>Verify ID Card</NavLink>
+          <NavLink to={config.routes.driverForm}>Verify ID Card</NavLink>
         </Button>
       </div>
     </div>

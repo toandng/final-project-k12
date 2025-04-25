@@ -4,12 +4,15 @@ import Register from "@/pages/Register/RegisterForm";
 import VerifyPhone from "@/pages/VerifyPhone/phone/VerifyPhoneForm";
 import HomePage from "@/pages/Home/HomePage";
 import ProfilePage from "@/pages/Account/Profile/ProfilePage";
-import History from "@/pages/History";
-import Features from "@/pages/Account/Component/Features";
+import VerifyDriver from "@/pages/VerifyIndentity/VerifyCard/VerifyDriver";
+import VerifyCard from "@/pages/VerifyIndentity/VerifyCard/VerifyCard";
+import Vehicle from "@/pages/Vehicle/Vehicle";
 import EditProfile from "@/pages/Account/Profile/Component/EditProfile/EditProfile";
+import History from "@/pages/History";
+import Notify from "@/pages/Home/Component/Notification";
+import Features from "@/pages/Account/Component/Features";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import NoHeader from "@/layouts/DefaultLayout/Component/NoHeader";
-import VerifyCard from "@/pages/VerifyIndentity/VerifyCard/VerifyCard";
 
 const routes = [
   // Trang chủ
@@ -33,6 +36,11 @@ const routes = [
   {
     path: "/history",
     component: History,
+    layout: NoHeader,
+  },
+  {
+    path: "/notify",
+    component: Notify,
     layout: NoHeader,
   },
   // Profile của chính mình
@@ -75,6 +83,16 @@ const routes = [
   {
     path: config.routes.verifyCard,
     component: VerifyCard,
+    layout: null,
+  },
+  {
+    path: config.routes.driverForm,
+    component: VerifyDriver,
+    layout: null,
+  },
+  {
+    path: config.routes.vehicle,
+    component: Vehicle,
     layout: null,
   },
 ];

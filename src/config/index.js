@@ -8,7 +8,10 @@ const config = {
     features: "/features",
     edit: "/edit",
     history: "/history",
+    notify: "/notify",
     verifyCard: "/verify-card",
+    driverForm: "/dirver-form",
+    vehicle: "/vehicle",
   },
 };
 export default config;
